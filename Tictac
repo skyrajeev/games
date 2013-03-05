@@ -1,0 +1,3863 @@
+
+
+import java.awt.*;
+import java.awt.event.*;
+
+
+class tic extends Frame implements ActionListener
+{
+ static boolean cond=true; static int u=15000;
+ private int ar[]=new int[9];
+ private Frame f;
+ private Panel p1,p2,p3;
+ private String ss="X",s1,s2,s3,s4,s5,s6,s7,s8,s9,user1,user2;
+ private int i,z=0;
+ private Button b1,b2,b3,b4,b5,b6,b7,b8,b9,exit1,exit2,exit3,start,replay,see;
+ private Label ll,l1,l2,tm;
+ private TextField tf1,tf2;
+ 
+// f.setDefaultCloseOperation(Frame.EXIT_ON_CLOSE);
+ time t=new time();
+ Thread th=new Thread(t);
+ 
+ tic()
+ {
+   f=new Frame(" Tic-Tac_Basic Game ");
+   p1=new Panel();
+   p2=new Panel();
+   p3=new Panel();
+  ll=new Label("                       ");
+  l1=new Label("Name of Player 1: ");
+  l2=new Label("Name of Player 2: ");
+  tm=new Label("  ");
+  tf1=new TextField(10);
+  tf2=new TextField(10);
+  b1=new Button("   ");
+  b2=new Button("   ");
+  b3=new Button("   ");
+  b4=new Button("   ");
+  b5=new Button("   ");
+  b6=new Button("   ");
+  b7=new Button("   ");
+  b8=new Button("   ");
+  b9=new Button("   ");
+  exit1=new Button(" Exit ");
+  exit2=new Button(" Back ");
+  exit3=new Button(" Exit ");
+  start=new Button(" Start_Game ");
+  replay=new Button(" RePlaY ");
+  see=new Button(" See ");
+
+  p1.setBounds(0,0,150,180);
+  p1.setLayout(null);
+  p2.setBounds(50,30,150,180);
+  p2.setLayout(null);
+  p2.setBackground(Color.DARK_GRAY);
+  p3.setBounds(30,30,190,190);
+  p3.setLayout(null);
+  p3.setBackground(Color.GRAY);
+//on panel 1st................
+  l1.setBounds(30,20,110,25);
+  p1.add(l1);
+  tf1.setBounds(40,60,110,25);
+  tf1.setText("Player1 X-mark  ");
+  tf1.setForeground(Color.red);
+  p1.add(tf1);
+  l2.setBounds(30,90,110,25);
+  p1.add(l2);
+  tf2.setBounds(40,120,110,25);
+  tf2.setText("COMPUTER");
+  p1.add(tf2);
+  tf2.setEditable(false);
+  tf2.setForeground(Color.green);
+  start.setBounds(20,150,70,30);
+  p1.add(start);
+  exit1.setBounds(100,150,50,30);
+  p1.add(exit1);
+//on panel 2nd.................
+  b1.setBounds(0,0,49,49);  b1.setForeground(Color.red);
+  p2.add(b1);
+  b2.setBounds(50,0,49,49);
+  p2.add(b2);
+  b3.setBounds(100,0,49,49);
+  p2.add(b3);
+  b4.setBounds(0,50,49,49);
+  p2.add(b4);
+  b5.setBounds(50,50,49,49);
+  p2.add(b5);
+  b6.setBounds(100,50,49,49);
+  p2.add(b6);
+  b7.setBounds(0,100,49,49);
+  p2.add(b7);
+  b8.setBounds(50,100,49,49);
+  p2.add(b8);
+  b9.setBounds(100,100,49,49);
+  p2.add(b9);
+  exit2.setBounds(10,160,130,20);
+  p2.add(exit2);
+  exit2.setForeground(Color.white);
+  exit2.setBackground(Color.GRAY);
+
+  //on panel 3rd.......................
+  ll.setBounds(20,50,160,30);
+  p3.add(ll);
+  ll.setForeground(Color.GREEN);
+  exit3.setBounds(30,90,125,30);
+  p3.add(exit3);
+  exit3.setForeground(Color.red);
+  replay.setBounds(30,125,60,30);
+  p3.add(replay);
+  replay.setForeground(Color.blue);
+  see.setBounds(95,125,60,30);
+  p3.add(see);
+  see.setForeground(Color.MAGENTA);
+  //registering action listener...............
+
+  b1.addActionListener(this);
+  b2.addActionListener(this);
+  b3.addActionListener(this);
+  b4.addActionListener(this);
+  b5.addActionListener(this);
+  b6.addActionListener(this);
+  b7.addActionListener(this);
+  b8.addActionListener(this);
+  b9.addActionListener(this);
+  exit1.addActionListener(this);
+  exit2.addActionListener(this);
+  exit3.addActionListener(this);
+  start.addActionListener(this);
+  replay.addActionListener(this);
+  see.addActionListener(this);
+
+  tm.setBounds(90, 220, 70, 25);
+  f.add(tm); tm.setVisible(false);
+
+  f.add(p2);p2.setVisible(false);
+  f.add(p3);p3.setVisible(false);
+  f.add(p1);
+  f.setVisible(true);
+  f.setSize(250,250);
+  f.setResizable(false);
+  f.setBackground(Color.LIGHT_GRAY);
+
+  f.addWindowListener(new WindowAdapter(){
+            @Override
+  public void windowClosing(WindowEvent we){
+  System.exit(0);
+  }
+  });
+  f.setLocation(200, 100);
+
+  //pack();
+ }
+
+     
+  class time implements Runnable
+ {
+            
+      public void strt(boolean cnd)
+      {
+        cond=cnd;u=15000;
+      }
+      
+
+        @Override
+   public void run()
+     {  
+     
+       tm.setVisible(true);
+              
+       do
+       {if(u==0)
+           u=15000;
+        tm.setText(String.valueOf((u/1000)+" secs left"));
+        if(u>10000)
+                tm.setBackground(Color.green);
+        else if(u >5000)
+            tm.setBackground(Color.yellow);
+        else if(u>3000)
+            tm.setBackground(Color.red);
+
+        u=u-500;
+        try{Thread.sleep(500);}catch(Exception eeee){  /* ignore*/}
+        
+       
+        if(!cond || u==0)
+          {
+             try{
+                 
+                    tm.setVisible(false);
+                    if(u==0)
+                          {
+                              p2.setVisible(false);
+                            p3.setVisible(true);
+                            ll.setText("Computer won , Time is up!");
+                    
+                          }
+                     
+                    do
+                    {Thread.sleep(500); }while(!cond || u==0);
+                                       
+                 
+                     tm.setVisible(true);
+                   } catch (Exception ex) {/*ignore*/ }
+            
+          }   // if cond ends---
+      
+      }while(cond );    //while loops ends here....
+         
+    // }//synchronised ends here---
+    }//run ends---------------------
+
+ }//time ends here...
+
+/*
+ |___________________________________________Constructor ends here____________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |________________________________________Action performed starts from here___________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+ public void actionPerformed(ActionEvent ae)
+ {
+   i=i+1;
+
+	if(ae.getSource()==b1)
+   {
+	   b1.setLabel(ss);
+	   b1.setEnabled(false);
+	   ++i;
+                       
+                         t.strt(false);
+	   sense(1);
+   }
+
+   if(ae.getSource()==b2)
+      {
+   	   b2.setLabel(ss);
+   	   b2.setEnabled(false);
+   	   ++i;
+                       t.strt(false);
+   	   sense(2);
+   }
+
+   if(ae.getSource()==b3)
+      {
+   	   b3.setLabel(ss);
+   	   b3.setEnabled(false);
+   	   ++i;
+              t.strt(false);
+   	   sense(3);
+   }
+
+   if(ae.getSource()==b4)
+      {
+   	   b4.setLabel(ss);
+   	   b4.setEnabled(false);
+   	   ++i; t.strt(false);
+   	   sense(4);
+   }
+
+   if(ae.getSource()==b5)
+      {
+   	   b5.setLabel(ss);
+   	   b5.setEnabled(false);
+   	   i=i+1; t.strt(false);
+   	   sense(5);
+   }
+
+   if(ae.getSource()==b6)
+      {
+   	   b6.setLabel(ss);
+   	   b6.setEnabled(false);
+   	   ++i; t.strt(false);
+   	   sense(6);
+   }
+
+   if(ae.getSource()==b7)
+      {
+   	   b7.setLabel(ss);
+   	   b7.setEnabled(false);
+   	   ++i; t.strt(false);
+   	   sense(7);
+   }
+
+   if(ae.getSource()==b8)
+      {
+   	   b8.setLabel(ss);
+   	   b8.setEnabled(false);
+   	   ++i; t.strt(false);
+   	   sense(8);
+   }
+
+   if(ae.getSource()==b9)
+      {
+   	   b9.setLabel(ss);
+   	   b9.setEnabled(false);
+   	   ++i; t.strt(false);
+   	   sense(9);
+   }
+
+   if(ae.getSource()==exit1)
+   { System.exit(0); }
+
+    if(ae.getSource()==exit2)
+   { //System.exit(0);
+        p2.setVisible(false);
+        p3.setVisible(true);
+        i=0;u=0;
+    }
+
+    if(ae.getSource()==exit3)
+   { System.exit(0); }
+
+
+   if(ae.getSource()==start)
+   {
+	   user1=tf1.getText();
+	   user2=tf2.getText();
+	   p1.setVisible(false);
+	   p2.setVisible(true);
+               th.start();
+	}
+
+  if(ae.getSource()==see)
+   {
+
+	   p3.setVisible(false);
+	   p2.setVisible(true);
+           b1.setEnabled(false);
+           b2.setEnabled(false);
+           b3.setEnabled(false);
+           b4.setEnabled(false);
+           b5.setEnabled(false);
+           b6.setEnabled(false);
+           b7.setEnabled(false);
+           b8.setEnabled(false);
+           b9.setEnabled(false);
+
+           for(int g=0;g<9 && ar[g]!=0 ;g++)
+           {
+               int gg=g+1;  // System.out.println(ar[g]);
+
+               switch(ar[g])
+                 {
+                 case 1:
+                     if(g%2==0)
+                     b1.setLabel("X"+String.valueOf(gg));
+                     else
+                     b1.setLabel("O"+String.valueOf(gg));
+                     break;
+                case 2:
+                     if(g%2==0)
+                     b2.setLabel("X"+String.valueOf(gg));
+                     else
+                     b2.setLabel("O"+String.valueOf(gg));
+                     break;
+
+                case 3:
+                     if(g%2==0)
+                     b3.setLabel("X"+String.valueOf(gg));
+                     else
+                     b3.setLabel("O"+String.valueOf(gg));
+                     break;
+
+               case 4:
+                     //System.out.println("in 4");
+                     if(g%2==0)
+                     b4.setLabel("X"+String.valueOf(gg));
+                     else
+                     b4.setLabel("O"+String.valueOf(gg));
+                     break;
+
+               case 5:
+                     if(g%2==0)
+                     b5.setLabel("X"+String.valueOf(gg));
+                     else
+                     b5.setLabel("O"+String.valueOf(gg));
+                     break;
+
+              case 6:
+                     if(g%2==0)
+                     b6.setLabel("X"+String.valueOf(gg));
+                     else
+                     b6.setLabel("O"+String.valueOf(gg));
+                     break;
+
+             case 7:
+                     if(g%2==0)
+                     b7.setLabel("X"+String.valueOf(gg));
+                     else
+                     b7.setLabel("O"+String.valueOf(gg));
+                     break;
+
+             case 8:
+                     if(g%2==0)
+                     b8.setLabel("X"+String.valueOf(gg));
+                     else
+                     b8.setLabel("O"+String.valueOf(gg));
+                     break;
+
+            case 9:
+                     if(g%2==0)
+                     b9.setLabel("X"+String.valueOf(gg));
+                     else
+                     b9.setLabel("O"+String.valueOf(gg));
+                     break;
+             }
+
+
+
+           }//for ends
+
+  } //see ends
+
+
+ if(ae.getSource()==replay)
+   {
+               
+	   p3.setVisible(false);
+	   p2.setVisible(true);
+           b1.setEnabled(true);b1.setLabel("");
+           b2.setEnabled(true);b2.setLabel("");
+           b3.setEnabled(true);b3.setLabel("");
+           b4.setEnabled(true);b4.setLabel("");
+           b5.setEnabled(true);b5.setLabel("");
+           b6.setEnabled(true);b6.setLabel("");
+           b7.setEnabled(true);b7.setLabel("");
+           b8.setEnabled(true);b8.setLabel("");
+           b9.setEnabled(true);b9.setLabel("");
+           i=1;z=0;
+           for(int h=0;h<9;h++)
+               ar[h]=0;
+              u=1;
+              t.strt(true);
+           //Thread thl=new Thread(t);
+         // thl.start();
+  }
+
+
+/*
+ |___________________________________________Buttons action Ends here_________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |________________________________________Win or loose conditions starts here_________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+
+if(i>=5)
+   {
+	   if(i==11)
+	      {
+			  p2.setVisible(false);
+		   p3.setVisible(true);
+			  ll.setText(" This Game is Drawn:  ");
+                                              t.strt(false);
+		 }
+	   s1=b1.getLabel(); s2=b2.getLabel(); s3=b3.getLabel(); s4=b4.getLabel(); s5=b5.getLabel(); s6=b6.getLabel(); s7=b7.getLabel(); s8=b8.getLabel(); s9=b9.getLabel();
+
+	   if((s1.equals("X") && s2.equals("X") && s3.equals("X")) || (s1.equals("O") && s2.equals("O") && s3.equals("O")))
+	   { 
+		   p2.setVisible(false);
+		   p3.setVisible(true);
+		   if(s1.equals("X"))
+		      ll.setText(user1+" You Won ");
+		   else
+		     ll.setText(user2+" You Won ");
+                    t.strt(false);
+	   }
+
+	   if((s4.equals("X") && s5.equals("X") && s6.equals("X")) || (s4.equals("O") && s5.equals("O") && s6.equals("O")))
+	   	   { 
+                                                                           p2.setVisible(false);
+		  		   p3.setVisible(true);
+		  		   if(s4.equals("X"))
+		  		      ll.setText(user1+" You Won ");
+		  		   else
+		              ll.setText(user2+" You Won "); t.strt(false);
+	   }
+
+	   if((s7.equals("X") && s8.equals("X") && s9.equals("X")) || (s7.equals("O") && s8.equals("O") && s9.equals("O")))
+	   	   {
+                                                                              p2.setVisible(false);
+			  		   p3.setVisible(true);
+			  		   if(s7.equals("X"))
+			  		      ll.setText(user1+" You Won ");
+			  		   else
+		                   ll.setText(user2+" You Won "); t.strt(false);
+	   }
+
+//____________________________________________________________________________________________________________________|
+//--------------------------------------------------------------------------------------------------------------------|
+	   if((s1.equals("X") && s4.equals("X") && s7.equals("X")) || (s1.equals("O") && s4.equals("O") && s7.equals("O")))
+	   	   { 
+                                                                        p2.setVisible(false);
+			 		   p3.setVisible(true);
+			 		   if(s1.equals("X"))
+			 		      ll.setText(user1+" You Won ");
+			 		   else
+		     ll.setText(user2+" You Won "); t.strt(false);
+	   }
+
+	   if((s2.equals("X") && s5.equals("X") && s8.equals("X")) || (s2.equals("O") && s5.equals("O") && s8.equals("O")))
+	   	   { 
+                                                                      p2.setVisible(false);
+			 		   p3.setVisible(true);
+			 		   if(s2.equals("X"))
+			 		      ll.setText(user1+" You Won ");
+			 		   else
+		     ll.setText(user2+" You Won "); t.strt(false);
+	   }
+
+	   if((s3.equals("X") && s6.equals("X") && s9.equals("X")) || (s3.equals("O") && s6.equals("O") && s9.equals("O")))
+	   	   {
+                                                                      p2.setVisible(false);
+			  		   p3.setVisible(true);
+			  		   if(s3.equals("X"))
+			  		      ll.setText(user1+" You Won ");
+			  		   else
+		     ll.setText(user2+" You Won "); t.strt(false);
+	   }
+
+//______________________________________________________________________________________________________________________|
+//----------------------------------------------------------------------------------------------------------------------|
+
+	   if((s1.equals("X") && s5.equals("X") && s9.equals("X")) || (s1.equals("O") && s5.equals("O") && s9.equals("O")))
+	   	   { 
+                                                                        p2.setVisible(false);
+					   p3.setVisible(true);
+					   if(s1.equals("X"))
+					      ll.setText(user1+" You Won ");
+					   else
+		                                                               ll.setText(user2+" You Won ");
+                                                                                  t.strt(false);
+	                                   }
+
+	   if((s3.equals("X") && s5.equals("X") && s7.equals("X")) || (s3.equals("O") && s5.equals("O") && s7.equals("O")))
+	   	   { cond=false;
+                                                                           p2.setVisible(false);
+				   p3.setVisible(true);
+				  if(s3.equals("X"))
+			                      ll.setText(user1+" You Won ");
+				 else
+		                                          ll.setText(user2+" You Won ");
+                                                                 t.strt(false);
+	                           }
+
+   }//win or loose ends here---------------
+
+     
+
+      
+ }//action ends here..........................................................................
+
+
+/*
+ |_________________________________________Action performed ends here_________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |__________________________________Artificial intelligence begins from here__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+
+ public void sense(int zz)
+ {
+    // try{Thread.sleep(100);}catch(InterruptedException ie){System.out.println(ie);}
+
+ 	ar[z]=zz;
+        //System.out.println(ar[z]);
+ 	//System.out.println(i);
+
+    switch(ar[0])
+      {
+         case 5:
+
+            if(i==3)
+                 {
+ 	          b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+                  }
+       //_________________________________________________________________________|
+       //----------------------case5, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z;ar[z]=3;
+ 		 break;
+ 		 case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		 break;
+ 		 case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		 break;
+ 		 case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		 break;
+ 		 case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		 break;
+ 		 case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=5..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case5, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+          if(i==7)
+             {
+             if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+                 break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 		case 7:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case5---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 6:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case5,i7------------------------------------------
+   	  if(ar[2]==3)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case5,i7-----------------------------------------
+
+   	if(ar[2]==4)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case5,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case5,i7-----------------------------------------
+       if(ar[2]==6)
+   	     {
+   	 switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case5,i7----------------------------------------
+
+       if(ar[2]==8)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//ifb5-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==1 && ar[4]==6)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 7:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case5, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==7)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case5, i9-----------------------------------
+
+   	if(ar[2]==3  && ar[4]==8)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case5, i9----------------------------------------
+
+   	if(ar[2]==4  && ar[4]==3)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //--------------------------------------------------------------------
+    if(ar[2]==7 && ar[4]==6)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case5, i9-----------------------------------------
+   if(ar[2]==6)
+       {
+   	if(ar[4]==1)
+            {
+          switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	      }//inner switch ends.......
+
+           }//inner if ends
+
+       if(ar[4]==2)
+              {
+           switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+
+            }//inner if ends
+
+      if(ar[4]==3)
+             {
+          switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+             }//inner if ends
+
+      if(ar[4]==7)
+              {
+         switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+            }//inner if ends
+
+     if(ar[4]==8)
+          {
+        switch(ar[z])
+ 	      {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	      }//inner switch ends.......
+          }//inner if ends
+
+     }//outer if for case5, i9==6 ends.........
+
+ //---------------------------------case5, i9-------------------------------------------
+   if(ar[2]==8)
+      {
+       if(ar[4]==1)
+           {
+        switch(ar[z])
+ 	      {
+ 	   	case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 7:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	      }//inner switch ends.......
+            }//inner if ends
+
+     if(ar[4]==3)
+         {
+         switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	      }//inner switch ends.......
+            }//inner if ends
+
+     if(ar[4]==4)
+           {
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	    }//inner switch ends.......
+         }//inner if ends
+
+     if(ar[4]==6)
+           {
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+          }//inner if ends
+
+     if(ar[4]==7)
+           {
+          switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+           }//inner if ends
+        }//if --8 ends
+
+    }// if b5-9 ends here..........
+
+ break;
+
+
+/*
+ |___________________________________________case 5 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+       case 1:
+
+            if(i==3)
+                 {
+ 	           b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+                  }
+       //_________________________________________________________________________|
+       //----------------------case1, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z;ar[z]=3;
+ 		 break;
+ 		 case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		 break;
+ 		 case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		 break;
+ 		 case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		 break;
+ 		 case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		 break;
+ 		 case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		 break;
+ 		 case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=5..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case1, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+          if(i==7)
+             {
+             if(ar[2]==2)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+                 break;
+ 		case 6:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case1---------------------------------------
+
+         if(ar[2]==3)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case1,i7------------------------------------------
+   	  if(ar[2]==4)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case1,i7-----------------------------------------
+
+   	if(ar[2]==6)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case1,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case1,i7-----------------------------------------
+       if(ar[2]==8)
+   	     {
+   	 switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 7:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case1,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 7:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//ifb5-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==2 && ar[4]==7)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case1, i9-------------------------------------------
+
+   if(ar[2]==3  && ar[4]==8)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 9:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case1, i9-----------------------------------
+
+   	if(ar[2]==4  && ar[4]==3)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case1, i9----------------------------------------
+
+   	if(ar[2]==6  && ar[4]==8)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //--------------------------------------------------------------------
+    if(ar[2]==7 && ar[4]==6)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case1, i9-----------------------------------------
+
+    if(ar[2]==8 && ar[4]==6)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case1, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 6:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+        }//i9 ends here
+
+
+     break;  //case-1, i9 ends here......
+
+/*
+ |_________________________________________case 1 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 2__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+     case 2:
+
+        if(i==3)
+            {
+ 	      b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+            }
+       //_________________________________________________________________________|
+       //----------------------case2, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z;ar[z]=3;
+ 		 break;
+ 		 case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		 break;
+ 		 case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		 break;
+ 		 case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		 break;
+ 		 case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		 break;
+ 		 case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		 break;
+ 		 case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=2..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case2, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+
+     if(i==7)
+        {
+           if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+                 break;
+ 		case 6:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case2---------------------------------------
+
+         if(ar[2]==3)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case2,i7------------------------------------------
+   	  if(ar[2]==4)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case2,i7-----------------------------------------
+
+   	if(ar[2]==6)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case2,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case2,i7-----------------------------------------
+       if(ar[2]==8)
+   	     {
+   	 switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 3:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 9:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case2,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 3:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//ifb5-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==1 && ar[4]==7)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case2, i9-------------------------------------------
+
+   if(ar[2]==3  && ar[4]==9)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case2, i9-----------------------------------
+
+   	if(ar[2]==4  && ar[4]==9)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case2, i9----------------------------------------
+
+   	if(ar[2]==6  && ar[4]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //--------------------------------------------------------------------
+    if(ar[2]==7 && ar[4]==6)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case2, i9-----------------------------------------
+
+    if(ar[2]==8 && ar[4]==4)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case2, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==4)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+      }//i9 ends here
+
+     break;  //case-2, i9 ends here......
+
+/*
+ |_________________________________________case 2 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 3__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+
+
+     case 3:
+          if(i==3)
+                 {
+ 	           b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+                  }
+       //_________________________________________________________________________|
+       //----------------------case3, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z;ar[z]=2;
+ 		 break;
+ 		 case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		 break;
+ 		 case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		 break;
+ 		 case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=5..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case3, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+          if(i==7)
+             {
+             if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+                 break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case3---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case3,i7------------------------------------------
+   	  if(ar[2]==4)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case3,i7-----------------------------------------
+
+   	if(ar[2]==6)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case3,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 9:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case3,i7-----------------------------------------
+       if(ar[2]==8)
+   	     {
+   	 switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 9:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case3,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//ifb5-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==1 && ar[4]==8)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 9:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case3, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==9)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case3, i9-----------------------------------
+
+   	if(ar[2]==4  && ar[4]==8)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 6:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case3, i9----------------------------------------
+
+   	if(ar[2]==6  && ar[4]==1)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //------------------------------case3, i=9--------------------------------------
+    if(ar[2]==7 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case3, i9-----------------------------------------
+
+    if(ar[2]==8 && ar[4]==4)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case1, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==4)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+        }//i9 ends here
+
+
+     break;  //case-3 ends here......
+
+/*
+ |_________________________________________case 3 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 4__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+
+
+       case 4:
+           if(i==3)
+            {
+ 	      b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+            }
+       //_________________________________________________________________________|
+       //----------------------case4, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z;ar[z]=7;
+ 		 break;
+ 		 case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		 break;
+ 		 case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		 break;
+ 		 case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		 break;
+ 		 case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		 break;
+ 		 case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		 break;
+ 		 case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=2..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case4, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+
+     if(i==7)
+        {
+           if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+                 break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case4---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case4,i7------------------------------------------
+   	  if(ar[2]==3)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case4,i7-----------------------------------------
+
+   	if(ar[2]==6)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case4,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case4,i7-----------------------------------------
+       if(ar[2]==8)
+   	     {
+   	 switch(ar[z])
+ 	       {
+                case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case4,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 7:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//ifb5-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==1 && ar[4]==3)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case4, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==9)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case4, i9-----------------------------------
+
+   	if(ar[2]==3  && ar[4]==8)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 6:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case4, i9----------------------------------------
+
+   	if(ar[2]==6  && ar[4]==8)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //---------------------------case4, i=9-----------------------------------------
+    if(ar[2]==7 && ar[4]==9)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case4, i9-----------------------------------------
+
+    if(ar[2]==8 && ar[4]==3)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 6:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case2, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 6:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+      }//i9 ends here
+
+     break;  //case-2, i9 ends here......
+
+/*
+ |_________________________________________case 4 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 6__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+     case 6:
+         if(i==3)
+            {
+ 	      b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+            }
+       //_________________________________________________________________________|
+       //----------------------case4, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z;ar[z]=2;
+ 		 break;
+ 		 case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		 break;
+ 		 case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		 break;
+ 		 case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=2..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case6, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+
+     if(i==7)
+        {
+           if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+                 break;
+ 		case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case6 ---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case6,i7------------------------------------------
+   	  if(ar[2]==3)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case6,i7-----------------------------------------
+
+   	if(ar[2]==4)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case6,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 9:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case6,i7-----------------------------------------
+       if(ar[2]==8)
+   	     {
+   	 switch(ar[z])
+ 	       {
+                case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case6,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 2:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//ifb5-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==1 && ar[4]==8)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case6, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==7)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case6, i9-----------------------------------
+
+   	if(ar[2]==3  && ar[4]==1)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case6, i9----------------------------------------
+
+   	if(ar[2]==4  && ar[4]==8)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //---------------------------case6, i=9-----------------------------------------
+    if(ar[2]==7 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case6, i9-----------------------------------------
+
+    if(ar[2]==8 && ar[4]==1)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case6, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==7)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+      }//i9 ends here
+
+     break;  //case-6,  ends here......
+
+/*
+ |_________________________________________case 6 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 7__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+        case 7:
+            if(i==3)
+                 {
+ 	           b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+                  }
+       //_________________________________________________________________________|
+       //----------------------case1, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z;ar[z]=4;
+ 		 break;
+ 		 case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		 break;
+ 		 case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		 break;
+ 		 case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=5..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case7, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+          if(i==7)
+             {
+             if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+                 break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case7---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 8:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case7,i7------------------------------------------
+   	  if(ar[2]==3)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 9:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case7,i7-----------------------------------------
+
+   	if(ar[2]==4)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 	        break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 8:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case7,i7------------------------------------
+       if(ar[2]==6)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 9:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case7,i7-----------------------------------------
+       if(ar[2]==8)
+   	     {
+   	 switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 6:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case7,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//if b7-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+
+      if(ar[2]==1 && ar[4]==6)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 9:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case7, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==6)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case7, i9-----------------------------------
+
+   	if(ar[2]==3  && ar[4]==2)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case7, i9----------------------------------------
+
+   	if(ar[2]==4  && ar[4]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //----------------------------case 7, i=9----------------------------------------
+    if(ar[2]==6 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 4:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case7, i9-----------------------------------------
+
+    if(ar[2]==8 && ar[4]==1)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case1, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+        }//i9 ends here
+
+     break;  //case-1, i9 ends here......
+
+
+  /*
+ |_________________________________________case 7 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 8__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+      case 8:
+        if(i==3)
+            {
+ 	      b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+            }
+       //_________________________________________________________________________|
+       //----------------------case4, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z;ar[z]=4;
+ 		 break;
+ 		 case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		 break;
+ 		 case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		 break;
+ 		 case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		 break;
+ 		 case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		 break;
+ 		 case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=2..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case8, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+
+     if(i==7)
+        {
+           if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+                 break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 7:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case8 ---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 3:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 9:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case8,i7------------------------------------------
+   	  if(ar[2]==3)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 9:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case8,i7-----------------------------------------
+
+   	if(ar[2]==4)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 9:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case8,i7------------------------------------
+       if(ar[2]==7)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 		case 6:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case8,i7-----------------------------------------
+       if(ar[2]==6)
+   	     {
+   	 switch(ar[z])
+ 	       {
+                case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case8,i7----------------------------------------
+
+       if(ar[2]==9)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//if b8-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+        if(ar[2]==1 && ar[4]==6)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case8, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==4)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case8, i9-----------------------------------
+
+   	if(ar[2]==3  && ar[4]==4)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 7:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case8, i9----------------------------------------
+
+   	if(ar[2]==4  && ar[4]==3)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 2:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 6:
+ 		    b9.setLabel("O"); b9.setEnabled(false); ++z; ar[z]=9;
+ 		break;
+ 		case 9:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //---------------------------case8, i=9-----------------------------------------
+    if(ar[2]==7 && ar[4]==1)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case8, i9-----------------------------------------
+
+    if(ar[2]==6 && ar[4]==1)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 2:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case6, i9-------------------------------------------
+    if(ar[2]==9 && ar[4]==3)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+      }//i9 ends here
+
+     break;  //case-6,  ends here......
+
+/*
+ |_________________________________________case 8 ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |______________________________________ computer plays case 9__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+     case 9:
+           if(i==3)
+                 {
+ 	           b5.setLabel("O"); b5.setEnabled(false); ++z; ar[z]=5;
+                  }
+       //_________________________________________________________________________|
+       //----------------------case9, i=5 starts----------------------------------|
+       //_________________________________________________________________________|
+
+           if(i==5)
+   	      {
+              switch(ar[z])
+ 	        {
+ 	   	 case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z;ar[z]=2;
+ 		 break;
+ 		 case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		 break;
+ 		 case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		 break;
+ 		 case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		 break;
+ 		 case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		 break;
+ 		 case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	     	 break;
+
+ 		}//inner switch ends.......
+
+             }//if=5..i=5 ends here.........
+
+       //_________________________________________________________________________|
+       //-------------------------- case9, i=7 starts-----------------------------|
+       //_________________________________________________________________________|
+          if(i==7)
+             {
+             if(ar[2]==1)
+   	       {
+                switch(ar[z])
+ 	        {
+ 	   	 case 3:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+                 break;
+ 		case 4:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 6:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 	        break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	     }
+
+   //-------------------------------------case9---------------------------------------
+
+         if(ar[2]==2)
+   	      {
+              switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 3:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 	        break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 	        }//inner switch ends.......
+   	      }
+
+     //-------------------------------case9,i7------------------------------------------
+   	  if(ar[2]==3)
+   	      {
+   	      switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 7:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 8:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 	        break;
+ 	      }//inner switch ends.......
+   	   }
+
+    //-----------------------------------case9,i7-----------------------------------------
+
+   	if(ar[2]==4)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 7:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+    //---------------------------------case9,i7------------------------------------
+       if(ar[2]==8)
+   	     {
+   	   switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 2:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 	        break;
+ 	      }//inner switch ends.......
+   	    }
+
+     //-------------------------------case9,i7-----------------------------------------
+       if(ar[2]==6)
+   	     {
+   	 switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 2:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 4:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	      }//inner switch ends.......
+   	    }
+   //--------------------------------case9,i7----------------------------------------
+
+       if(ar[2]==7)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 	        break;
+ 		case 3:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 6:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+
+     }//if b9-7 ends here.........
+
+  //_________________________________________________________________________|
+  //-------------------------- i9 starts and i7 ends-------------------------|
+  //_________________________________________________________________________|
+
+  if(i==9)
+    {
+
+      if(ar[2]==1 && ar[4]==8)
+   	    {
+   	     switch(ar[z])
+ 	       {
+ 	   	case 3:
+ 		    b6.setLabel("O"); b6.setEnabled(false); ++z; ar[z]=6;
+ 		break;
+ 		case 4:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 6:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //--------------------------------case9, i9-------------------------------------------
+
+   if(ar[2]==2  && ar[4]==4)
+   	     {
+   	      switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 		case 3:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 8:
+ 		    b3.setLabel("O"); b3.setEnabled(false); ++z; ar[z]=3;
+ 		break;
+ 	       }//inner switch ends.......
+   	    }
+
+//-----------------------------------case9, i9-----------------------------------
+
+   	if(ar[2]==3  && ar[4]==4)
+   	   {
+   	   switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 7:
+ 		    b8.setLabel("O"); b8.setEnabled(false); ++z; ar[z]=8;
+ 		break;
+ 		case 8:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+  //---------------------------------case9, i9----------------------------------------
+
+   	if(ar[2]==7  && ar[4]==2)
+   	   {
+   	  switch(ar[z])
+ 	       {
+ 	        case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 3:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+    //----------------------------case 9, i=9----------------------------------------
+    if(ar[2]==4 && ar[4]==2)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 6:
+ 		    b7.setLabel("O"); b7.setEnabled(false); ++z; ar[z]=7;
+ 		break;
+ 		case 7:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //-------------------------------case9, i9-----------------------------------------
+
+    if(ar[2]==6 && ar[4]==7)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 		case 2:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 		case 4:
+ 		    b2.setLabel("O"); b2.setEnabled(false); ++z; ar[z]=2;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+
+ //---------------------------------case9, i9-------------------------------------------
+    if(ar[2]==8 && ar[4]==3)
+   	{
+        switch(ar[z])
+ 	       {
+ 	   	case 1:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 2:
+ 		    b4.setLabel("O"); b4.setEnabled(false); ++z; ar[z]=4;
+ 		break;
+ 		case 4:
+ 		    b1.setLabel("O"); b1.setEnabled(false); ++z; ar[z]=1;
+ 		break;
+ 	       }//inner switch ends.......
+   	   }
+        }//i9 ends here
+
+     break;  //case-9 ends here......
+ /*
+ |___________________________________________casesss ends here_________________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |________________________________________computer will not play now__________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+
+       }//switch ends here...............
+
+     ++z;
+              u=1;
+              t.strt(true);
+
+   }//sense ends here.................
+
+/*
+ |___________________________________________arti-sense ends here______________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |________________________________________class time Starts From Here_________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+
+
+
+}//class tic ends here..........
+
+/*
+ |___________________________________________class tic ends here______________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ |________________________________________MAIN Class Starts From Here_________________________________________________|
+ |--------------------------------------------------------------------------------------------------------------------|
+ */
+
+class Tictac
+{public static void main(String args[]){ tic tttt=new tic();}}
